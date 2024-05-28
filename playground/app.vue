@@ -1,37 +1,29 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
-const form = reactive({
-  username: '',
-  password: '',
-  code: '',
-})
+async function callHono() {
+  const res = await client.api.hono.$post()
+  console.log(res)
+}
+
+async function callHonoX() {
+  const res = await client.api.honoX.$post()
+  console.log(res)
+}
 </script>
 
 <template>
   <div class="p-3 [&>*]:m-2">
     <div>
-      <div>Server Auth</div>
-      <div>
-        <input
-          v-model="form.username"
-          type="text"
-        >
-        <input
-          v-model="form.password"
-          type="text"
-        >
-        <input
-          v-model="form.code"
-          type="text"
-        >
-      </div>
+      <div>Api Call</div>
       <input
         type="button"
-        value="Public API"
+        value="Hono API"
+        @click="callHono"
       >
       <input
         type="button"
-        value="Protected API"
+        value="HonoX API"
+        @click="callHonoX"
       >
     </div>
   </div>

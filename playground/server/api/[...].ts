@@ -6,7 +6,7 @@ const routes
   = app
     .basePath('/api')
     .use(logger())
-    .route('/auth', HonoRouter)
+    .route('/', HonoRouter)
 
 export type AppType = typeof routes
 export default handler
