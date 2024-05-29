@@ -18,6 +18,9 @@ export default defineNuxtModule<ModuleOptions>({
   setup(_options, _nuxt) {
     const resolver = createResolver(import.meta.url)
 
+    // Transpile runtime
+    _nuxt.options.build.transpile.push(resolver.resolve('./runtime'))
+
     /**
      * Inject Server side utils
      */
