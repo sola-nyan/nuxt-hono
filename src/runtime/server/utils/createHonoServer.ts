@@ -1,11 +1,16 @@
 import { Hono } from 'hono'
 import { defineEventHandler } from 'h3'
-import type { H3Event } from 'h3'
-import type { Customhandlers } from './type'
 import HonoDefaultRequestCreator from './HonoDefaultRequestCreator'
 
+type H3EventInternal = Parameters<Parameters<typeof defineEventHandler>[0]>[0]
+
+interface Customhandlers {
+  requestCreator: (event: H3EventInternal) => Promise<Request>
+  unhandleErrorHandler: (error: unknown) => void
+}
+
 export default function createHonoServer(customHandlers?: Customhandlers) {
-  const app = new Hono<{ Bindings: { event: H3Event } }>()
+  const app = new Hono<{ Bindings: { event: H3EventInternal } }>()
   const requetCreator = customHandlers?.requestCreator ?? HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
 
