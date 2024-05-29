@@ -2,12 +2,10 @@ import { Hono } from 'hono'
 import { defineEventHandler } from 'h3'
 import HonoDefaultRequestCreator from './HonoDefaultRequestCreator'
 
-interface Customhandlers {
+export default function createHonoServer(customHandlers?: {
   requestCreator: (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) => Promise<Request>
   unhandleErrorHandler: (error: unknown) => void
-}
-
-export default function createHonoServer(customHandlers?: Customhandlers) {
+}) {
   const app = new Hono<{ Bindings: { event: Parameters<Parameters<typeof defineEventHandler>[0]>[0] } }>()
   const requetCreator = customHandlers?.requestCreator ?? HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
