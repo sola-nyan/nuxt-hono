@@ -1,7 +1,8 @@
 import { Hono } from 'hono'
 import { defineEventHandler } from 'h3'
+import type { H3Event } from 'h3'
+import type { Customhandlers } from './type'
 import HonoDefaultRequestCreator from './HonoDefaultRequestCreator'
-import type { Customhandlers, H3Event } from '~/src/type'
 
 export default function createHonoServer(customHandlers?: Customhandlers) {
   const app = new Hono<{ Bindings: { event: H3Event } }>()
