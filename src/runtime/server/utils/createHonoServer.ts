@@ -1,8 +1,7 @@
 import { Hono } from 'hono'
-import { defineEventHandler } from 'h3'
-import HonoDefaultRequestCreator from './HonoDefaultRequestCreator'
+import { defineEventHandler, getRequestProtocol, getRequestHost, readRawBody } from 'h3'
 
-export default function createHonoServer(customHandlers?: {
+export function createHonoServer(customHandlers?: {
   requestCreator: (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) => Promise<Request>
   unhandleErrorHandler: (error: unknown) => void
 }) {
@@ -28,4 +27,25 @@ export default function createHonoServer(customHandlers?: {
     handler,
     app,
   }
+}
+
+async function HonoDefaultRequestCreator(event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) {
+  const PayloadMethods = ['PATCH', 'POST', 'PUT', 'DELETE']
+  const protocol = getRequestProtocol(event)
+  const domain = getRequestHost(event)
+  const method = event.method
+  const requestInfo: RequestInfo = `${protocol}://${domain}${event.path}`
+
+  const requestInit: RequestInit = {
+    method,
+    headers: event._headers,
+  }
+
+  if (PayloadMethods.includes(method)) {
+    const rawBody = await readRawBody(event)
+    if (rawBody)
+      requestInit.body = rawBody
+  }
+
+  return new Request(requestInfo, requestInit)
 }

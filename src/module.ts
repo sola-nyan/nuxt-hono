@@ -1,4 +1,4 @@
-import { defineNuxtModule, createResolver, addServerImportsDir } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerImports } from '@nuxt/kit'
 
 export interface ModuleOptions {
 
@@ -19,9 +19,11 @@ export default defineNuxtModule<ModuleOptions>({
     const resolver = createResolver(import.meta.url)
 
     /**
-     * Inject Server side utils
+     * Inject Server side util
      */
-    const utils = resolver.resolve('./runtime/server/utils')
-    addServerImportsDir(utils)
+    addServerImports([{
+      from: resolver.resolve('./runtime/server/utils/createHonoServer'),
+      name: 'createHonoServer',
+    }])
   },
 })
