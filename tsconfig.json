@@ -5,4 +5,7 @@
     "node_modules",
     "playground",
   ],
+  "compilerOptions": {
+    "types": ["h3"]
+  }
 }
