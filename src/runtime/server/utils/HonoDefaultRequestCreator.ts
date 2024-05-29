@@ -1,9 +1,7 @@
 import type { defineEventHandler } from 'h3'
 import { getRequestProtocol, getRequestHost, readRawBody } from 'h3'
 
-type H3EventInternal = Parameters<Parameters<typeof defineEventHandler>[0]>[0]
-
-export default async function (event: H3EventInternal) {
+export default async function (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) {
   const PayloadMethods = ['PATCH', 'POST', 'PUT', 'DELETE']
   const protocol = getRequestProtocol(event)
   const domain = getRequestHost(event)
