@@ -28,7 +28,7 @@ export async function DefaultRequestCreator(event: H3Event) {
   return new Request(requestInfo, requestInit)
 }
 
-export default function (customHandlers?: Customhandlers) {
+export function createHonoServer(customHandlers?: Customhandlers) {
   const app = new Hono<{ Bindings: { event: H3Event } }>()
   const requetCreator = customHandlers?.requestCreator ?? DefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
