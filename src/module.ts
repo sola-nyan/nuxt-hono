@@ -1,5 +1,6 @@
-import { defineNuxtModule, createResolver, addServerImports, addImports } from '@nuxt/kit'
+import { defineNuxtModule, createResolver, addServerImports, addImportsDir } from '@nuxt/kit'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ModuleOptions {
 
 }
@@ -37,9 +38,6 @@ export default defineNuxtModule<ModuleOptions>({
     /**
      * Inject Util : clientHelper
      */
-    addImports([{
-      from: resolver.resolve('./runtime/utils/clientHelper'),
-      name: 'createHonoJsonClient',
-    }])
+    addImportsDir(resolver.resolve('./runtime/utils'))
   },
 })

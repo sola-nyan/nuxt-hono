@@ -1,8 +1,10 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
+import { hc } from 'hono/client'
 import type { AppType } from './server/api/[...]'
 
-const useAPI = createHonoJsonClient<AppType>('https://localhost:3000', undefined)
+const client = hc<AppType>('https://localhost:3000')
+const useAPI = wrapHonoClinetForJson(client)
 
 async function callHono() {
   const res = await useAPI(c => c.api.hono.$post())

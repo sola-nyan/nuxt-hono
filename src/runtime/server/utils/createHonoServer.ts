@@ -1,13 +1,13 @@
 import { Hono } from 'hono'
+import type { H3Event } from 'h3'
 import { defineEventHandler, getRequestProtocol, getRequestHost, readRawBody } from 'h3'
 
 export function createHonoServer(customHandlers?: {
   basePath?: string
-  requestCreator?: (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) => Promise<Request>
   unhandleErrorHandler?: (error: unknown) => void
 }) {
-  const app = new Hono<{ Bindings: { event: Parameters<Parameters<typeof defineEventHandler>[0]>[0] } }>()
-  const requetCreator = customHandlers?.requestCreator ?? HonoDefaultRequestCreator
+  const app = new Hono<{ Bindings: { event: H3Event } }>()
+  const requetCreator = HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
 
   if (customHandlers?.basePath) {
@@ -35,7 +35,7 @@ export function createHonoServer(customHandlers?: {
   }
 }
 
-async function HonoDefaultRequestCreator(event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) {
+async function HonoDefaultRequestCreator(event: H3Event) {
   const PayloadMethods = ['PATCH', 'POST', 'PUT', 'DELETE']
   const protocol = getRequestProtocol(event)
   const domain = getRequestHost(event)
