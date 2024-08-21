@@ -1,6 +1,4 @@
-import { Hono } from 'hono'
-
-export const HonoRouter = new Hono()
+export const HonoRouter = createHonoRouter()
   .post(
     // API PATH
     '/hono',
@@ -14,6 +12,6 @@ export const HonoRouter = new Hono()
     '/honoX',
     // LOGIC
     async (c) => {
-      return c.json(false)
+      return c.json(c.env.event.path)
     },
   )

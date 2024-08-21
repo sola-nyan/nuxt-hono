@@ -2,12 +2,17 @@ import { Hono } from 'hono'
 import { defineEventHandler, getRequestProtocol, getRequestHost, readRawBody } from 'h3'
 
 export function createHonoServer(customHandlers?: {
-  requestCreator: (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) => Promise<Request>
-  unhandleErrorHandler: (error: unknown) => void
+  basePath?: string
+  requestCreator?: (event: Parameters<Parameters<typeof defineEventHandler>[0]>[0]) => Promise<Request>
+  unhandleErrorHandler?: (error: unknown) => void
 }) {
   const app = new Hono<{ Bindings: { event: Parameters<Parameters<typeof defineEventHandler>[0]>[0] } }>()
   const requetCreator = customHandlers?.requestCreator ?? HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
+
+  if (customHandlers?.basePath) {
+    app.basePath(customHandlers?.basePath)
+  }
 
   const handler = defineEventHandler(async (event) => {
     try {
@@ -18,6 +23,7 @@ export function createHonoServer(customHandlers?: {
       if (unhandleErrorHandler)
         unhandleErrorHandler(e)
       else {
+        console.log(e)
         throw e
       }
     }
@@ -38,7 +44,7 @@ async function HonoDefaultRequestCreator(event: Parameters<Parameters<typeof def
 
   const requestInit: RequestInit = {
     method,
-    headers: event._headers,
+    headers: event.headers,
   }
 
   if (PayloadMethods.includes(method)) {
