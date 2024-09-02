@@ -10,9 +10,7 @@ export function createHonoServer(customHandlers?: {
   const requetCreator = HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
 
-  if (customHandlers?.basePath) {
-    app.basePath(customHandlers?.basePath)
-  }
+  app.basePath(customHandlers?.basePath ?? '/api')
 
   const handler = defineEventHandler(async (event) => {
     try {
