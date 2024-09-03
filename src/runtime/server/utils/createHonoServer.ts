@@ -3,14 +3,11 @@ import type { H3Event } from 'h3'
 import { defineEventHandler, getRequestProtocol, getRequestHost, readRawBody } from 'h3'
 
 export function createHonoServer(customHandlers?: {
-  basePath?: string
   unhandleErrorHandler?: (error: unknown) => void
 }) {
   const app = new Hono<{ Bindings: { event: H3Event } }>()
   const requetCreator = HonoDefaultRequestCreator
   const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
-
-  app.basePath(customHandlers?.basePath ?? '/api')
 
   const handler = defineEventHandler(async (event) => {
     try {
