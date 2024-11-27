@@ -1,27 +1,29 @@
 import { Hono } from 'hono'
 import type { H3Event } from 'h3'
 import { defineEventHandler, getRequestProtocol, getRequestHost, readRawBody } from 'h3'
+import type { ErrorHandler, NotFoundHandler } from 'hono'
 
-export function createHonoServer(customHandlers?: {
-  unhandleErrorHandler?: (error: unknown) => void
+interface ExtendedEnv { Bindings: { event: H3Event } }
+
+export function createHonoServer(option?: {
+  unhandleErrorHandler?: ErrorHandler<ExtendedEnv>
+  notFountHandler?: NotFoundHandler<ExtendedEnv>
 }) {
-  const app = new Hono<{ Bindings: { event: H3Event } }>()
+  const app = new Hono<ExtendedEnv>()
+
+  if (option?.unhandleErrorHandler) {
+    app.onError(option.unhandleErrorHandler)
+  }
+
+  if (option?.notFountHandler) {
+    app.notFound(option.notFountHandler)
+  }
+
   const requetCreator = HonoDefaultRequestCreator
-  const unhandleErrorHandler = customHandlers?.unhandleErrorHandler
 
   const handler = defineEventHandler(async (event) => {
-    try {
-      const request = await requetCreator(event)
-      return await app.fetch(request, { event })
-    }
-    catch (e) {
-      if (unhandleErrorHandler)
-        unhandleErrorHandler(e)
-      else {
-        console.log(e)
-        throw e
-      }
-    }
+    const request = await requetCreator(event)
+    await app.fetch(request, { event })
   })
 
   return {
