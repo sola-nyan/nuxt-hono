@@ -23,7 +23,7 @@ export function createHonoServer(option?: {
 
   const handler = defineEventHandler(async (event) => {
     const request = await requetCreator(event)
-    await app.fetch(request, { event })
+    return await app.fetch(request, { event })
   })
 
   return {
