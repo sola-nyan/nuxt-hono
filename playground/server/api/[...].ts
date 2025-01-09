@@ -1,12 +1,12 @@
 import { logger } from 'hono/logger'
+import { Hono } from 'hono'
 import { HonoRouter } from '../hono/routers/HonoRouter'
 
-const { handler, app } = createHonoServer()
-const routes
-  = app
-    .basePath('/api')
-    .use(logger())
-    .route('/', HonoRouter)
+const app = new Hono()
+  .basePath('/api')
+  .use(logger())
+  .route('/', HonoRouter)
 
-export type AppType = typeof routes
-export default handler
+export type AppType = typeof app
+
+export default createH3HonoHandler(app)
