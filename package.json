@@ -47,6 +47,6 @@
     "nuxt": "^3.12.4",
     "typescript": "latest",
     "vitest": "^2.0.3",
-    "vue-tsc": "^2.0.26"
+    "vue-tsc": "^2.2.8"
   }
 }
