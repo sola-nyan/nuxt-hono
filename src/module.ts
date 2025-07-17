@@ -11,7 +11,7 @@ export default defineNuxtModule<ModuleOptions>({
     name: MODULE_NAME,
     configKey: 'hono',
     compatibility: {
-      nuxt: '^3.11.0',
+      nuxt: '^4.0.0',
     },
   },
   defaults: {

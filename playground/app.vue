@@ -3,8 +3,16 @@
 import { hc } from 'hono/client'
 import type { AppType } from './server/api/[...]'
 
-const client = hc<AppType>('https://localhost:3000')
-const useAPI = honoClientWrapper(client)
+const client = hc<AppType>('http://localhost:3000')
+const useAPI = honoClientWrapper(client, {
+  preRequest: (data) => {
+    console.log(data)
+  },
+  async postResponse({ isJson, res }) {
+    if (isJson)
+      console.log(await res.json())
+  },
+})
 
 async function callHono() {
   const res = await useAPI(c => c.api.hono.$post())
@@ -12,7 +20,11 @@ async function callHono() {
 }
 
 async function callHonoX() {
-  const res = await useAPI(c => c.api.honoX.$post())
+  const res = await useAPI(c => c.api.honoX.$post({
+    json: {
+      test: 'A',
+    },
+  }))
   console.log(res)
 }
 </script>

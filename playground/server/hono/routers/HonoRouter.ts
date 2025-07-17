@@ -12,6 +12,6 @@ export const HonoRouter = createH3HonoRouter()
     '/honoX',
     // LOGIC
     async (c) => {
-      return c.json(c.env.event.path)
+      return c.json({ success: true, path: c.env.event.path })
     },
   )
