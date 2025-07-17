@@ -7,11 +7,11 @@ const regex = /\((.*?)\)/ // ()で囲まれた文字列をキャプチャする�
 function argParse(argStr: string) {
   const vname = argStr.match(regex)![1]!
   const st1 = argStr.indexOf(vname, vname.length + 2)
-  const pathMethod = argStr.substring(st1 + vname.length).replaceAll('.', '/')
-  const st2 = pathMethod.lastIndexOf('/')
-  const path = pathMethod.substring(0, st2)
-  const st3 = pathMethod.lastIndexOf('(')
-  const method = pathMethod.substring(st2 + 2, st3)
+  const pathMethod = argStr.substring(st1 + vname.length).replaceAll('.', '/').trim()
+  const st2 = pathMethod.indexOf('$')
+  const path = pathMethod.substring(0, st2 - 1)
+  const st3 = pathMethod.indexOf('(')
+  const method = pathMethod.substring(st2 + 1, st3)
   return { path, method }
 }
 
