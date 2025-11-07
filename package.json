@@ -41,7 +41,7 @@
     "hono": "^4.8.5"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^2.6.2",
+    "@nuxt/devtools": "^2.7.0",
     "@nuxt/eslint": "^1.5.2",
     "@nuxt/module-builder": "^1.0.1",
     "@nuxt/schema": "^4.0.0",
