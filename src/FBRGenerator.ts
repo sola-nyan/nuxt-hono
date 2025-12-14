@@ -75,7 +75,6 @@ export default app
   }
 
   nuxt.hook('builder:watch', async (event, path) => {
-    console.log(event, path)
     sleepTime = +500
     if (!path.startsWith(`${root}/${serverDir}/${honoDir}/routers/`))
       return
