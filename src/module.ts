@@ -1,8 +1,10 @@
 import { defineNuxtModule, createResolver, addServerImports, addImportsDir } from '@nuxt/kit'
+import { FBRGenerator } from './FBRGenerator'
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ModuleOptions {
-
+  enableFBR: boolean
+  serverDir: string
+  honoDir: string
 }
 
 const MODULE_NAME = '@sola-nyan/nuxt-hono'
@@ -15,6 +17,9 @@ export default defineNuxtModule<ModuleOptions>({
     },
   },
   defaults: {
+    enableFBR: false,
+    serverDir: 'server',
+    honoDir: 'hono',
   },
   setup(_options, _nuxt) {
     const resolver = createResolver(import.meta.url)
@@ -35,6 +40,12 @@ export default defineNuxtModule<ModuleOptions>({
       name: 'createH3HonoHandler',
 
     }])
+
+    /**
+     * File Based Routing
+     */
+    if (_options.enableFBR)
+      FBRGenerator(_nuxt, _options)
 
     /**
      * Inject Util : clientHelper

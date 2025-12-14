@@ -1,4 +1,4 @@
-export const HonoRouter = createH3HonoRouter()
+export const router = createH3HonoRouter()
   .post(
     // API PATH
     '/hono',

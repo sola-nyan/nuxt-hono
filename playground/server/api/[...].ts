@@ -1,11 +1,11 @@
 import { logger } from 'hono/logger'
 import { Hono } from 'hono'
-import { HonoRouter } from '../hono/routers/HonoRouter'
+import generatedRouter from '../hono/general/generatedRoutes'
 
 const app = new Hono()
   .basePath('/api')
   .use(logger())
-  .route('/', HonoRouter)
+  .route('/', generatedRouter)
 
 export type AppType = typeof app
 

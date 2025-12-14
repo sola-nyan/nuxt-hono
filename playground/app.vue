@@ -1,30 +1,28 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
-import { hc } from 'hono/client'
 import type { AppType } from './server/api/[...]'
 
-const client = hc<AppType>('http://localhost:3000')
-const useAPI = honoClientWrapper(client, {
-  preRequest: (data) => {
-    console.log(data)
+const client = createH3HonoClient<AppType>('http://localhost:3000', {
+  preHandler: (url) => {
+    console.log(`[pre] url: ${url}`)
   },
-  async postResponse({ isJson, res }) {
-    if (isJson)
-      console.log(await res.json())
+  postHandler: (res) => {
+    console.log(`[post] ok: ${res.ok}`)
   },
+
 })
 
 async function callHono() {
-  const res = await useAPI(c => c.api.hono.$post())
+  const res = await client.api.hono.$post()
   console.log(res)
 }
 
 async function callHonoX() {
-  const res = await useAPI(c => c.api.honoX.$post({
+  const res = await client.api.honoX.$post({
     json: {
       test: 'A',
     },
-  }))
+  })
   console.log(res)
 }
 </script>
