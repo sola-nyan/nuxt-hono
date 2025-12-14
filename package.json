@@ -1,7 +1,7 @@
 {
   "name": "@sola-nyan/nuxt-hono",
-  "version": "0.1.2",
-  "description": "Nuxt module for hono adapter",
+  "version": "1.0.0",
+  "description": "Nuxt module for hono",
   "repository": {
     "type": "git",
     "url": "https://github.com/sola-nyan/nuxt-hono.git"
@@ -45,7 +45,6 @@
     "@nuxt/eslint": "^1.12.1",
     "@nuxt/module-builder": "^1.0.2",
     "@nuxt/schema": "^4.2.2",
-    "@nuxt/test-utils": "^3.21.0",
     "@types/node": "^25.0.2",
     "changelogen": "^0.6.2",
     "eslint": "^9.39.2",
