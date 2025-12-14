@@ -9,7 +9,7 @@ export function createH3HonoClient<T extends Hono<any, any, any>>(
   baseUrl: string, options?: {
     preHandler?: (url: string, init: RequestInit | undefined) => void
     postHandler?: (res: Response) => void
-  }) {
+  }): ReturnType<typeof hc<T>> {
   const NitroCustomRequestFetcher: FetchLike = async (input, init) => {
     const url = parseUrl(input)
     const headers = parseHeadersForSSR(init)
