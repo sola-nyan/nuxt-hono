@@ -27,14 +27,6 @@ export default defineNuxtModule<ModuleOptions>({
     const resolver = createResolver(import.meta.url)
 
     /**
-     * Inject Server Util : createH3HonoApp
-     */
-    addServerImports([{
-      from: resolver.resolve('./runtime/server/utils/createH3HonoApp'),
-      name: 'createH3HonoApp',
-    }])
-
-    /**
      * Inject Server Util : createH3HonoRouter
      */
     addServerImports([{

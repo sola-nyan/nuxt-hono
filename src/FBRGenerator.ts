@@ -41,10 +41,10 @@ export async function FBRGenerator(nuxt: Nuxt, option: ModuleOptions) {
       mounts.push(`  .route('${basePath}', ${varName})`)
     })
 
-    return `import { Hono } from 'hono'
+    return `import { createH3HonoRouter } from '#imports'
 ${imports.join('\n')}
 
-const app = new Hono()
+const app = createH3HonoRouter()
 ${mounts.join('\n')}
 export default app
 `
