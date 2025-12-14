@@ -1,7 +1,9 @@
 <!-- eslint-disable no-console -->
 <script setup lang="ts">
+import { hc } from 'hono/client'
 import type { AppType } from './server/api/[...]'
 
+const cc = hc<AppType>('http://localhost:3000')
 const client = createH3HonoClient<AppType>('http://localhost:3000', {
   preHandler: (url) => {
     console.log(`[pre] url: ${url}`)
