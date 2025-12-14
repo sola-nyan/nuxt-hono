@@ -5,6 +5,25 @@ import { hc } from 'hono/client'
 
 type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>
 
+export function createH3HonoClient<T extends Hono<any, any, any>>(
+  baseUrl: string, options?: {
+    preHandler?: (url: string, init: RequestInit | undefined) => void
+    postHandler?: (res: Response) => void
+  }) {
+  const NitroCustomRequestFetcher: FetchLike = async (input, init) => {
+    const url = parseUrl(input)
+    const headers = parseHeadersForSSR(init)
+    if (options?.preHandler) await options?.preHandler(url, init)
+    const res = await safeFetch(url, init, headers)
+    if (options?.postHandler) await options?.postHandler(res)
+    return res
+  }
+
+  return hc<T>(baseUrl, {
+    fetch: NitroCustomRequestFetcher,
+  })
+}
+
 function jsonMethodOverride(obj: any): Response {
   obj.json = async function () {
     return obj._data
@@ -47,23 +66,4 @@ function parseHeadersForSSR(init: RequestInit | undefined) {
     }
   }
   return headers
-}
-
-export function createH3HonoClient<AppType extends Hono>(
-  baseUrl: string, options?: {
-    preHandler?: (url: string, init: RequestInit | undefined) => void
-    postHandler?: (res: Response) => void
-  }) {
-  const NitroCustomRequestFetcher: FetchLike = async (input, init) => {
-    const url = parseUrl(input)
-    const headers = parseHeadersForSSR(init)
-    if (options?.preHandler) await options?.preHandler(url, init)
-    const res = await safeFetch(url, init, headers)
-    if (options?.postHandler) await options?.postHandler(res)
-    return res
-  }
-
-  return hc<AppType>(baseUrl, {
-    fetch: NitroCustomRequestFetcher,
-  })
 }

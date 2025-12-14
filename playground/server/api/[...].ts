@@ -1,8 +1,7 @@
 import { logger } from 'hono/logger'
-import { Hono } from 'hono'
 import generatedRouter from '../hono/generated/generatedRoutes'
 
-const app = new Hono()
+const app = createH3HonoRouter()
   .basePath('/api')
   .use(logger())
   .route('/', generatedRouter)
