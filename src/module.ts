@@ -5,6 +5,7 @@ export interface ModuleOptions {
   enableFBR: boolean
   serverDir: string
   honoDir: string
+  generatedDir: string
 }
 
 const MODULE_NAME = '@sola-nyan/nuxt-hono'
@@ -20,6 +21,7 @@ export default defineNuxtModule<ModuleOptions>({
     enableFBR: false,
     serverDir: 'server',
     honoDir: 'hono',
+    generatedDir: 'generated',
   },
   setup(_options, _nuxt) {
     const resolver = createResolver(import.meta.url)

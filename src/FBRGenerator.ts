@@ -12,8 +12,8 @@ export async function FBRGenerator(nuxt: Nuxt, option: ModuleOptions) {
   const logger = useLogger('nuxt-hono')
   const serverDir = option.serverDir
   const honoDir = option.honoDir
+  const generatedDir = option.generatedDir
   const routersFileDir = `${serverDir}/${honoDir}/routers`
-  const generateDir = `${serverDir}/${honoDir}/general`
   const root = nuxt.options.rootDir
   const routesDir = join(root, routersFileDir)
 
@@ -57,10 +57,10 @@ export default app
   addTemplate({
     filename: `#generatedRoutes`,
     write: true,
-    dst: `${root}/${generateDir}/generatedRoutes.ts`,
+    dst: `${root}/${serverDir}/${honoDir}/${generatedDir}/generatedRoutes.ts`,
     getContents: async () => generated.code,
   })
-  logger.info(`Router generated: /${serverDir}/${honoDir}/${generateDir}/generatedRoutes.ts `)
+  logger.info(`Router generated: /${serverDir}/${honoDir}/${generatedDir}/generatedRoutes.ts `)
 
   nuxt.options.watch.push(`${root}/${serverDir}/${honoDir}/routers`)
   const targetEvent = ['add', 'change', 'unlinkDir', 'unlink']
@@ -72,7 +72,7 @@ export default app
     logger.info('Router Change Detected : Updating Hono router')
     generated.code = await codeGen()
     await updateTemplates()
-    logger.info(`Router generated: /${serverDir}/${honoDir}/${generateDir}/generatedRoutes.ts `)
+    logger.info(`Router generated: /${serverDir}/${honoDir}/${generatedDir}/generatedRoutes.ts `)
   }
 
   nuxt.hook('builder:watch', async (event, path) => {
