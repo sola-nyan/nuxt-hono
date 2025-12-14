@@ -1,7 +1,6 @@
 import { promises as fsp } from 'node:fs'
 import { join, relative } from 'node:path'
-import { consola } from 'consola'
-import { addTemplate, updateTemplates } from '@nuxt/kit'
+import { addTemplate, updateTemplates, useLogger } from '@nuxt/kit'
 import type { ModuleOptions } from './module'
 import type { Nuxt } from 'nuxt/schema'
 
@@ -10,7 +9,7 @@ function stripExt(p: string): string {
 }
 
 export async function FBRGenerator(nuxt: Nuxt, option: ModuleOptions) {
-  const logger = consola.withTag('nuxt-hono')
+  const logger = useLogger('nuxt-hono')
   const serverDir = option.serverDir
   const honoDir = option.honoDir
   const routersFileDir = `${serverDir}/${honoDir}/routers`
