@@ -37,20 +37,20 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.2.2"
+    "@nuxt/kit": "4.2.2"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^3.1.1",
-    "@nuxt/eslint": "^1.12.1",
-    "@nuxt/module-builder": "^1.0.2",
-    "@nuxt/schema": "^4.2.2",
-    "@types/node": "^25.0.2",
-    "changelogen": "^0.6.2",
-    "eslint": "^9.39.2",
-    "nuxt": "^4.2.2",
+    "@nuxt/devtools": "3.1.1",
+    "@nuxt/eslint": "1.12.1",
+    "@nuxt/module-builder": "1.0.2",
+    "@nuxt/schema": "4.2.2",
+    "@types/node": "25.0.2",
+    "changelogen": "0.6.2",
+    "eslint": "9.39.2",
+    "nuxt": "4.2.2",
     "typescript": "latest",
-    "vue-tsc": "^3.1.8",
-    "hono": "^4.11.0"    
+    "vue-tsc": "3.1.8",
+    "hono": "4.11.0"    
   },
   "peerDependencies": {
     "hono": "^4.11.0"
