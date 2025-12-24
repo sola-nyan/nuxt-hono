@@ -36,7 +36,7 @@ export async function FBRGenerator(nuxt: Nuxt, option: ModuleOptions) {
         `import { router as ${varName} } from '~~/${serverDir}/${honoDir}/${relFromHonoRoot}'`,
       )
 
-      const basePath = toRoutePath(relFromHonoRoot)
+      const basePath = convertRouterPath(relFromHonoRoot)
       logger.info(`Detected Hono Router: ${relFromHonoRoot} -> ${basePath} `)
       mounts.push(`  .route('${basePath}', ${varName})`)
     })
@@ -105,61 +105,49 @@ export async function collectFiles(dir: string): Promise<string[]> {
   return result
 }
 
-type PathString = string
+const eqIgnoreCase = (a: string, b: string) => a.toLowerCase() === b.toLowerCase()
+const startsWithIgnoreCase = (s: string, prefix: string) =>
+  s.toLowerCase().startsWith(prefix.toLowerCase())
+const toLowerCamel = (s: string) => (s ? s[0]!.toLowerCase() + s.slice(1) : s)
 
-function stripRouterSuffix(name: string): string {
-  return name.replace(/Routers?$/i, '')
-}
+function convertRouterPath(input: string): string {
+  const normalized = input.replace(/\\/g, '/')
+  const parts = normalized.split('/').filter(Boolean)
 
-function toCamelCase(s: string): string {
-  if (!s) return s
+  const routersIdx = parts.indexOf('routers')
+  if (routersIdx === -1) throw new Error(`Invalid input: missing "routers": ${input}`)
 
-  if (/[ _-]/.test(s)) {
-    const parts = s.split(/[ _-]+/).filter(Boolean)
-    return parts
-      .map((w, i) => {
-        const lower = w.toLowerCase()
-        if (i === 0) return lower
-        return lower.charAt(0).toUpperCase() + lower.slice(1)
-      })
-      .join('')
+  const rel = parts.slice(routersIdx + 1)
+  if (rel.length === 0) throw new Error(`Invalid input: missing router name: ${input}`)
+
+  const last = rel[rel.length - 1]!
+  if (!last.endsWith('Router')) {
+    throw new Error(`Invalid input: last segment must end with "Router": ${input}`)
   }
 
-  return s.charAt(0).toLowerCase() + s.slice(1)
-}
+  const dirs = rel.slice(0, -1)
+  const routerCore = last.slice(0, -'Router'.length)
 
-function isIndexName(name: string): boolean {
-  return /^index$/i.test(name)
-}
-
-export function toRoutePath(filePath: PathString): string {
-  const noExt = stripExt(filePath)
-
-  const parts = noExt.split('/').filter(Boolean)
-  const routersIdx = parts.findIndex(p => p === 'routers')
-  if (routersIdx < 0 || routersIdx === parts.length - 1) {
-    throw new Error(`Invalid router path: ${filePath}`)
+  const isIndexByName = routerCore === 'Index'
+  const isIndexBySameAsLastDir
+    = dirs.length > 0 && eqIgnoreCase(routerCore, dirs[dirs.length - 1]!)
+  const joinedDirs = dirs.join('')
+  if (dirs.length > 0 && joinedDirs.length > 0 && startsWithIgnoreCase(routerCore, joinedDirs)) {
+    const rest = routerCore.slice(joinedDirs.length)
+    const base = dirs.map(toLowerCamel)
+    if (rest.length === 0) {
+      return base.length === 0 ? '/' : `/${base.join('/')}`
+    }
+    return `/${[...base, toLowerCamel(rest)].join('/')}`
   }
+  const isIndexBySameAsAllDirsJoined
+    = dirs.length > 0 && joinedDirs.length > 0 && eqIgnoreCase(routerCore, joinedDirs)
 
-  const afterRouters = parts.slice(routersIdx + 1)
-  const filePart = afterRouters[afterRouters.length - 1]
-  const dirParts = afterRouters.slice(0, -1)
+  const isIndexLike
+    = isIndexByName || isIndexBySameAsLastDir || isIndexBySameAsAllDirsJoined
 
-  const baseName = stripRouterSuffix(filePart!)
+  const outSegs = isIndexLike ? dirs : [...dirs, routerCore]
+  const converted = outSegs.map(toLowerCamel).join('/')
 
-  if (dirParts.length === 0) {
-    if (isIndexName(baseName)) return '/'
-    return `/${toCamelCase(baseName)}`
-  }
-
-  const outDirs = dirParts.map(d => toCamelCase(d))
-  const lastDirOriginal = dirParts[dirParts.length - 1]
-
-  const fileCamel = toCamelCase(baseName)
-  const lastDirCamel = toCamelCase(lastDirOriginal!)
-
-  const omitFile
-    = !isIndexName(baseName) && fileCamel.toLowerCase() === lastDirCamel.toLowerCase()
-
-  return '/' + [...outDirs, ...(omitFile ? [] : [fileCamel])].join('/')
+  return converted.length === 0 ? '/' : `/${converted}`
 }
