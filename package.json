@@ -49,7 +49,7 @@
     "eslint": "9.39.2",
     "nuxt": "4.2.2",
     "typescript": "latest",
-    "vue-tsc": "3.1.8",
+    "vue-tsc": "3.2.5",
     "hono": "4.11.0"
   },
   "peerDependencies": {
