@@ -1,6 +1,6 @@
 {
   "name": "@sola-nyan/nuxt-hono",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Nuxt module for hono",
   "repository": {
     "type": "git",
