@@ -6,5 +6,5 @@
 
 ## ディレクトリ構成制限の説明
 - デフォルトでは `server` をルートとし、その直下に `hono` ディレクトリを置きます。この中に `routers` サブフォルダを作り、ルーティング定義は `*Router.ts` または `*Router.mts` 形式のファイル名で配置する必要があります。
-- FBR(File Based Routing) を有効にすると `server/hono/routers` をの変更を監視し、 `server/hono/general/generatedRoutes.ts` を常に最新化します。
+- FBR(File Based Routing) を有効にすると `server/hono/routers` 配下のファイルの変更を監視し、 `server/hono/general/generatedRoutes.ts` を常に最新化します。
 
