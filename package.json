@@ -50,7 +50,7 @@
     "nuxt": "4.4.5",
     "typescript": "latest",
     "vue-tsc": "3.2.8",
-    "hono": "4.12.18"
+    "hono": "4.13.5"
   },
   "peerDependencies": {
     "hono": "^4.11.0"
