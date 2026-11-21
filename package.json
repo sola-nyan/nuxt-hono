@@ -47,7 +47,7 @@
     "@types/node": "25.7.0",
     "changelogen": "0.6.2",
     "eslint": "10.3.0",
-    "nuxt": "4.4.5",
+    "nuxt": "4.6.0",
     "typescript": "latest",
     "vue-tsc": "3.2.8",
     "hono": "4.12.18"
